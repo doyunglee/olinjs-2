@@ -1,4 +1,5 @@
 
+
 /**
  * Module dependencies.
  */
@@ -10,16 +11,7 @@ var express = require('express')
   , path = require('path');
 
 var mongoose = require('mongoose');
-mongoose.connect('localhost');
-
-var schema = mongoose.Schema({ name: 'string' }); //make sure the name is a string
-var Cat = mongoose.model('dog', schema);
-
-var kitty = new Cat({ name: 'Zildjian' });
-kitty.save(function (err) {
-  if (err) // ...
-  console.log('meow');
-});
+mongoose.connect(process.env.MONGOLAB_URI || 'localhost');
 
 var app = express();
 
@@ -39,17 +31,20 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+//list page
 app.get('/', routes.index);
-app.get('/users', user.list);
-app.get('/users/new', user.new);
-app.get('/kitten/new', function (req, res) {
-  var kitty = new Cat({ name: 'Zildjian' });
-  
-  kitty.save(function (err) {
-    if (err) console.log("err");
-    res.send("created new kitten");
-  });
-});
+app.get('/cats', user.list);
+
+//make a new cat
+app.get('/cats/new', user.new);
+app.post('/cats/new', user.addcat);//user posts the data here
+
+//sorts the color of the cat
+app.get('/cats/color/:color', user.colorcat);
+
+//eliminate the oldest cat
+app.get('/cats/delete/old'. user.old);
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
