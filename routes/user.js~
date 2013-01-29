@@ -10,6 +10,7 @@ Array.prototype.sortByProp = function(p){
 }
 
 var mongoose = require('mongoose');
+
 var schema = mongoose.Schema({ name: String, color: Array(), age: Number }); //make sure the name is a string
 var Cat = mongoose.model('Cat', schema);
 
@@ -45,7 +46,7 @@ exports.old = function(req, res){ // Takes rid of last cat.
   Cat.find({}, function(err, db_cats) {
     db_cats.sortByProp('age');
     oldcat = db_cats[db_cats.length-1];
-    Cat.remove({name: oldcat.name}, function(err){
+    Cat.remove({_id: oldcat._id}, function(err){
       if(err) console.log("oh  my, what a Cat-astrophe. Something is wrong.");
     res.send('You meownster, I hope you are happy the cat died');         
     });

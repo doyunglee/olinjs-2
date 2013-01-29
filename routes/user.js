@@ -10,6 +10,8 @@ Array.prototype.sortByProp = function(p){
 }
 
 var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGOLAB_URI || 'localhost');
+
 var schema = mongoose.Schema({ name: String, color: Array(), age: Number }); //make sure the name is a string
 var Cat = mongoose.model('Cat', schema);
 
